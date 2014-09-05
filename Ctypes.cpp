@@ -4,9 +4,10 @@
 using namespace std;
 class Ctypes
 {
-   static int totalNORMAL;
-   static int totalMETANEPHRIC;
-   static int totalATTRACTIVE;
+   public:
+      static int totalNORMAL;
+      static int totalMETANEPHRIC;
+      static int totalATTRACTIVE;
    static void addCell(Types type)
    {
         switch(type)

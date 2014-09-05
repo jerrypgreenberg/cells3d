@@ -48,7 +48,7 @@ class Cell {
         Cell *testCell;
          /** cell this cell is bound to (if this is a metanephric cell **/
         Cell *boundCell;
-        Cell *linkCellDown;
+        Cell *linkCellDown = NULL;
         int nBoundCell;
         Cell *normalBoundCell;
         /** metaneprhic cells bound to this cell **/
@@ -147,7 +147,7 @@ class Cell {
        void setMangle(double inAngle);
        Cell getTestCell();
        void setTestCell(Cell tCell);
-       Cell getLinkCellDown();
+       Cell *getLinkCellDown();
        void setLinkCellDown(Cell cell);
        std::string to_String(SubTypes s);
        std::string to_String(PeriodicType p);
