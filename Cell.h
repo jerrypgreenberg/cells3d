@@ -2,33 +2,7 @@
 #define __CELL__
 #include<vector>
 #include<string>
-/** types of normal cells **/
-enum class SubTypes {
-    NORMAL,
-    END,
-    INTERMEDIATE,
-    MAIN_R,
-    MAIN_L,
-    MAIN_C,
-    MAIN,
-    LAST
-};
-/** flags for cells crossing periodic boundary **/
-enum class PeriodicType {
-    NORMAL,
-    CROSSED
-};
-/** flags for metanephric cells  **/
-enum class AddedType {
-    NORMAL,
-    ADDED
-};
-enum class Types {
-   NORMAL,
-   METANEPHRIC,
-   ATTRACTIVE
-};
-/** Cell class describing a single cell **/
+#include "CTypes.h"
 class Cell {
     private:
         /** maximum number of cells **/
@@ -39,7 +13,7 @@ class Cell {
         /** SubTypes enum variable **/
         SubTypes subType;
         /** 3d coord array **/
-        double coords[3];
+        double coords[4];
         /** cell that the current cell has "grown" from **/
        /** cells grown after this one that are linked to it  (currently not used) **/
         std::vector<Cell> linkCellUp;
@@ -60,7 +34,7 @@ class Cell {
         /** AddedType enum variable **/
         AddedType aType;
         /**  docked metanephric cell coordinates **/
-        double dock[3];
+        double dock[4];
         double mAngle;
     public:
         /** total number of cells **/

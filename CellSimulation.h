@@ -2,13 +2,13 @@
 #define __CELLSIMULATION__
 #include "Cell.h"
 #include<vector>
+#define CELL_TYPES 3
 class CellSimulation {
 
    private:
-     static int CELL_TYPES;
      static int NUM_ATTRACTIVE_CELLS;
      static int MAX_METANEPHRIC_ATTRACT_MOVES;
-     static double[] ZERO_COORDS;
+     static double ZERO_COORDS[];
      double stepLength;
      double branchStepLength;
      int iter;
@@ -25,15 +25,18 @@ class CellSimulation {
      double spreadAngle = 120.;
      int cellSkip = 4;
      double fraction;
-     std::vector<Cell> AllCells[CELL_TYPES];
-     std::vector lastCells;
+     // std::vector < std::vector <Cell> > AllCells(3,std::vector<Cell>(0));
+     std::vector < std::vector <Cell> > AllCells;
+     std::vector<Cell> lastCells;
      bool first = true;
      int cellGrowthCount = 0;
      int metanephric_attract_moves = 0;
      double attractiveRadius;
      static bool METANEPHRIC_CELL_PERIODIC;
      bool debug = false;
+     Cell oldOldCell;
      void placeNewCell(Cell oldCell, Cell newCell, int icount);
+     double scaleFactor(Cell c1,Cell C2);
 
   public:
      static double TOL;
@@ -51,8 +54,8 @@ class CellSimulation {
      static double leftLimit;
      static double upperLimit;
      static double lowerLimit;
-     static int updateCount = 0;
-     CellSimulation(int inIter, double minang, double maxang, Cell cell, long seed, double length, double fraction, int maxB, int intermediate, double spread, int skip);
+     static int updateCount;
+     CellSimulation(int inIter, double minang, double maxang, Cell cell, unsigned int seed, double length, double fraction, int maxB, int intermediate, double spread, int skip);
      void setSpreadAngle(double a);
      double getSpreadAngle();
      void setCellSkip(int a);
@@ -67,8 +70,8 @@ class CellSimulation {
      int getMaxBranch();
      void setIter(int it);
      int getIter();
-     double getStepLength()
-     void setStepLength(double s)
+     double getStepLength();
+     void setStepLength(double s);
      double getBranchStepLength();
      void setBranchStepLength(double s);
      unsigned getRandomSeed();
@@ -79,5 +82,7 @@ class CellSimulation {
      void growCell(Cell cell);
      void growCells(std::vector<Cell> cells);
      int getNumCellsToMain(Cell cell);
+     void setMaxIntermediateBranch(int branch);
+     int getMaxIntermediateBranch();
 };
 #endif

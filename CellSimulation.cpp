@@ -14,10 +14,9 @@ double CellSimulation::BRANCH_STEP_LENGTH = 1.;
 double CellSimulation::METANEPHRIC_WIDTH = 0.2;
 double CellSimulation::ANGLE_DEVIATION = 20.;
 bool CellSimulation::METANEPHRIC_CELL_PERIODIC = true;
-int CellSimulation::CELL_TYPES = 3;
 int CellSimulation::NUM_ATTRACTIVE_CELLS = 10;
 int CellSimulation::MAX_METANEPHRIC_ATTRACT_MOVES = 60;
-double[] CellSimulation::ZERO_COORDS = {
+double CellSimulation::ZERO_COORDS[3] = {
       0., 0., 0.
 };
 
@@ -42,14 +41,15 @@ CellSimulation::CellSimulation(int inIter, double minang, double maxang, Cell ce
                 attractiveRadius = (0.9 * iter) / getCellSkip();
                 upperLimit = attractiveRadius * 1.1;
                 lowerLimit = 0.0;
+                updateCount = 0;
                 leftLimit = (-(upperLimit - lowerLimit) * 1.4) / 2;
                 rightLimit = -leftLimit;
-
+                AllCells.reserve(CELL_TYPES);
                 // cout << " Left " << leftLimit << " Right " << rightLimit <<
                 //  " Lower " << lowerLimit << " Upper " << upperLimit <<endl;
 }
-void setSpreadAngle(double a) {
-           spreadAngle = a;
+void CellSimulation::setSpreadAngle(double a) {
+      spreadAngle = a;
 }
 double CellSimulation::getSpreadAngle() {
            return (spreadAngle);
@@ -134,39 +134,39 @@ void CellSimulation::printSimulationStep() {
        Cell cell;
 
        // for (j = 0; j < getNormalCellTotal(); ++j) {
-       //   cout << AllCells[Types.NORMAL.ordinal()].elementAt(j)) << endl;
+       //   cout << AllCells[(int) cell.getType()][j] << endl;
        // }
 }
 void CellSimulation::growCell(Cell cell) {
-         AllCells[cell.getType()].push_back(cell);
+         AllCells[(int) cell.getType()].push_back(cell);
          return;
 }
 void CellSimulation::growCells(vector<Cell> cells) {
          vector<Cell>::iterator i;
-         for (i = cells.begin(); i != cells.end(); ++i)
-               AllCells[cells[0].getType()].push_back(i);
+         for (i = cells.begin(); i == cells.end(); ++i)
+               AllCells[(int) cells[0].getType()].push_back(*i);
          return;
 }
 int CellSimulation::getNumCellsToMain(Cell cell)
 {
        vector<Cell> trace;
        int count = 0;
-       int vector<Cell>::iterator i;
+       vector<Cell>::iterator i;
        trace = cell.traceCellDown();
 
-        if ((cell.getSubType() == SubTypes.MAIN_R) ||
-            (cell.getSubType() == SubTypes.MAIN_L) ||
-            (cell.getSubType() == SubTypes.MAIN_C) ||
-            (cell.getSubType() == SubTypes.MAIN)) {
+        if ((cell.getSubType() == SubTypes::MAIN_R) ||
+            (cell.getSubType() == SubTypes::MAIN_L) ||
+            (cell.getSubType() == SubTypes::MAIN_C) ||
+            (cell.getSubType() == SubTypes::MAIN)) {
             return (0);
         }
 
-        for (i = itrace.begin(); i == trace.end(); ++i) {
+        for (i = trace.begin(); i == trace.end(); ++i) {
 
-            if ((i.getSubType() == SubTypes.MAIN_R) ||
-                (i.getSubType() == SubTypes.MAIN_L) ||
-                (cell.getSubType() == SubTypes.MAIN_C) ||
-                (i.getSubType() == SubTypes.MAIN)) {
+            if ((i->getSubType() == SubTypes::MAIN_R) ||
+                (i->getSubType() == SubTypes::MAIN_L) ||
+                (cell.getSubType() == SubTypes::MAIN_C) ||
+                (i->getSubType() == SubTypes::MAIN)) {
                 return (count);
             } else {
                 ++count;
@@ -175,6 +175,21 @@ int CellSimulation::getNumCellsToMain(Cell cell)
 
         return (count);
 }
+void CellSimulation::setMaxIntermediateBranch(int branch) {
+        maxIntermediateBranch = branch;
+}
+
+int CellSimulation::getMaxIntermediateBranch() {
+        return (maxIntermediateBranch);
+}
+
+double CellSimulation::scaleFactor(Cell c1, Cell c2) {
+        return (sqrt(pow(c2.getCoordX() - c1.getCoordX(),2) +
+            pow((c2.getCoordY() - c1.getCoordY()), 2) +
+            pow((c2.getCoordZ() - c1.getCoordZ()), 2)));
+}
+
+
 void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
 	if (oldCell.getLinkCellDown() == (Cell *) NULL) {
 	     if (first == false) {
@@ -182,9 +197,9 @@ void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
 				return;
             
              }
-             if (oldCell.getSubType() == SubTypes.INTERMEDIATE) {
+             if (oldCell.getSubType() == SubTypes::INTERMEDIATE) {
      	         newCell.setCellCount(newCell.getCellCount() - 1);
-	            // cout << "RETURN Cell.getSubType() == SubTypes.INTERMEDIATE" << endl;
+	            // cout << "RETURN Cell.getSubType() == SubTypes::INTERMEDIATE" << endl;
 	         return;
 	    }
 	    newCell.setCoords(Transform.translate(oldCell.getCoords(), 0., 1. * getStepLength(), 0.));
@@ -192,7 +207,7 @@ void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
          }
 	 else {
 	       if (cellGrowthCount <= 1) {
-			// cout << "RETURN Cell.getSubType() == SubTypes.INTERMEDIATE" <<endl;
+			// cout << "RETURN Cell.getSubType() == SubTypes::INTERMEDIATE" <<endl;
 			return;
 		}
 		if (getNumCellsToMain(oldCell) > MAX_NUM_CELLS_BRANCH) {
@@ -200,12 +215,13 @@ void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
 			return;
 		}
 		// cout << "OLD CELL SUB TYPE " << oldCell.getSubType()) << endl;
-		oldOldCell = oldCell.getLinkCellDown();
+		oldOldCell = *oldCell.getLinkCellDown();
 		scale = scaleFactor(oldCell, oldOldCell);
-		if ((oldCell.getSubType() == SubTypes.MAIN_R) ||
-			(oldCell.getSubType() == SubTypes.MAIN_L) ||
-			(oldCell.getSubType() == SubTypes.MAIN_C) ||
+		if ((oldCell.getSubType() == SubTypes::MAIN_R) ||
+			(oldCell.getSubType() == SubTypes::MAIN_L) ||
+			(oldCell.getSubType() == SubTypes::MAIN_C) ||
 			(cellGrowthCount <= 2)) {
 			   newCell.setCoords(Transform.translate(ZERO_COORDS, 0., getStepLength(), 0.));
 		}
+        }
 }
