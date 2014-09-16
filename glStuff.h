@@ -2,7 +2,7 @@
 #define __GLSTUFF__
 #include <GL/gl.h>
 #include <GL/glu.h>
-typedef GLdouble  glMatrixd[4][4];
+#include <glut.h>
 enum class AXIS {
 XAXIS, 
 YAXIS,
