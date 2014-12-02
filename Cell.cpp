@@ -255,7 +255,7 @@ void Cell::setTestCell(Cell tCell)
 }
 Cell* Cell::getLinkCellDown()
 {
-     return (*linkCellDown);
+     return (linkCellDown);
 }
 void Cell::setLinkCellDown(Cell down)
 {
@@ -366,7 +366,7 @@ string Cell::to_String(SubTypes s)
 }
 string Cell::to_String(PeriodicType p)
 {
-    Switch(p)
+    switch(p)
     {
        case PeriodicType::NORMAL:
           return("NORMAL");
@@ -403,7 +403,7 @@ string Cell::to_String(Types t)
           break;
     }   
 }
-int CellSimulation::traceCellDownNum() {
+int Cell::traceCellDownNum() {
         Cell currentCell = *this;
         int cCount = 1;
         while (currentCell.getLinkCellDown() != (Cell*) NULL) {
@@ -412,14 +412,18 @@ int CellSimulation::traceCellDownNum() {
         }
         return (cCount);
 }
-vector<Cell> traceCellDown() {
+vector<Cell> Cell::traceCellDown() {
         Cell currentCell = *this;
         vector<Cell> cellList;
         cellList.push_back(currentCell);
-        while (currentCell.linkCellDown != null) {
+        while (currentCell.linkCellDown != NULL) {
             cellList.push_back(*currentCell.getLinkCellDown());
             currentCell = *currentCell.getLinkCellDown();
         }
         return (cellList);
+}
+int Cell::getGrowthCount()
+{
+        return (growthCount);
 }
 

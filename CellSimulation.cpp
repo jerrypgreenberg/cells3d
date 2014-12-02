@@ -1,4 +1,6 @@
 #include "CellSimulation.h"
+#include "Transform.h"
+#include "Cell.h"
 #include<iostream>
 #include<cmath>
 using namespace std;
@@ -191,6 +193,7 @@ double CellSimulation::scaleFactor(Cell c1, Cell c2) {
 
 
 void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
+        double scale;
 	if (oldCell.getLinkCellDown() == (Cell *) NULL) {
 	     if (first == false) {
 		// cout << "RETURN oldCell.getLinkCellDown() == NULL");
@@ -202,7 +205,7 @@ void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
 	            // cout << "RETURN Cell.getSubType() == SubTypes::INTERMEDIATE" << endl;
 	         return;
 	    }
-	    newCell.setCoords(Transform.translate(oldCell.getCoords(), 0., 1. * getStepLength(), 0.));
+	    newCell.setCoords(Transform::translate(0., 1. * getStepLength(), 0.,oldCell.getCoords()));
 	    first = false;
          }
 	 else {
@@ -221,7 +224,7 @@ void CellSimulation::placeNewCell(Cell oldCell, Cell newCell, int icount) {
 			(oldCell.getSubType() == SubTypes::MAIN_L) ||
 			(oldCell.getSubType() == SubTypes::MAIN_C) ||
 			(cellGrowthCount <= 2)) {
-			   newCell.setCoords(Transform.translate(ZERO_COORDS, 0., getStepLength(), 0.));
+			   newCell.setCoords(Transform::translate(0., getStepLength(), 0.,ZERO_COORDS));
 		}
         }
 }

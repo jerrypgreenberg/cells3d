@@ -1,5 +1,5 @@
 #include "glStuff.h"
-#include "Transform.h"
+#include "CellSimulation.h"
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -56,10 +56,8 @@ int main(int argc,char **argv)
    gluQuadricOrientation (quadObj2, GLU_OUTSIDE);
    gluQuadricNormals(quadObj2, GLU_SMOOTH);
    // glutReshapeFunc(myReshape);
+  
+   CellSimulation cs(30, 30., 60.,Cell(0., 0., 0., SubTypes::END),1.0, 1.0), 2, 2,120.,5);
 
-
-   returnVec=Transform::rotate(0.0,0.0,1.0,-30.,vec);
-   for(i=0;i<4;++i)
-     cout << returnVec[i] << endl;
 }
 

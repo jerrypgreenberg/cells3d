@@ -50,11 +50,11 @@ class CellSimulation {
      static double METANEPHRIC_WIDTH;
      static double ANGLE_DEVIATION;
      static int MAX_ATTRACT;
-     static double rightLimit;
-     static double leftLimit;
-     static double upperLimit;
-     static double lowerLimit;
-     static int updateCount;
+     double rightLimit;
+     double leftLimit;
+     double upperLimit;
+     double lowerLimit;
+     int updateCount;
      CellSimulation(int inIter, double minang, double maxang, Cell cell, unsigned int seed, double length, double fraction, int maxB, int intermediate, double spread, int skip);
      void setSpreadAngle(double a);
      double getSpreadAngle();
