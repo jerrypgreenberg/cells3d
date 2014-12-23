@@ -22,7 +22,8 @@ double CellSimulation::ZERO_COORDS[3] = {
       0., 0., 0.
 };
 
-CellSimulation::CellSimulation(int inIter, double minang, double maxang, Cell cell, unsigned int seed, double length, double fraction, int maxB, int intermediate, double spread, int skip) {
+
+CellSimulation::CellSimulation(int inIter, double minang, double maxang, Cell cell,unsigned int seed, double length, double fraction, int maxB,int intermediate,double spread,int skip) {
                 int i;
                 setIter(inIter);
                 setStepLength(length);

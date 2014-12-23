@@ -55,8 +55,8 @@ class CellSimulation {
      double upperLimit;
      double lowerLimit;
      int updateCount;
-     CellSimulation(int inIter, double minang, double maxang, Cell cell, unsigned int seed, double length, double fraction, int maxB, int intermediate, double spread, int skip);
      void setSpreadAngle(double a);
+     CellSimulation(int inIter,double minang, double maxang, Cell cell,unsigned int seed, double length, double fraction, int maxB,int intermediate,double spread,int skip);
      double getSpreadAngle();
      void setCellSkip(int a);
      int getCellSkip();

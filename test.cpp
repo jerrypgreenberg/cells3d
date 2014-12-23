@@ -19,6 +19,7 @@ int main(int argc,char **argv)
 
    double vec[4] = {0.,1.,0.,1.};
    double *returnVec;
+   unsigned int seed = 872367251;
    int i;
 
    glutInit(&argc,argv);
@@ -57,7 +58,7 @@ int main(int argc,char **argv)
    gluQuadricNormals(quadObj2, GLU_SMOOTH);
    // glutReshapeFunc(myReshape);
   
-   CellSimulation cs(30, 30., 60.,Cell(0., 0., 0., SubTypes::END),1.0, 1.0), 2, 2,120.,5);
+     CellSimulation cs(30,30., 60.,Cell(0., 0., 0., SubTypes::END),seed, 1.0, 1.0,2,2,120.,5);
 
 }
 
