@@ -12,6 +12,7 @@ class CellSimulation {
      double stepLength;
      double branchStepLength;
      int iter;
+     int count = 0;
      double angleMainSign = 1.;
      double angleSign = 1.;
      double perpAngleSign = 1.;
@@ -25,9 +26,8 @@ class CellSimulation {
      double spreadAngle = 120.;
      int cellSkip = 4;
      double fraction;
-     // std::vector < std::vector <Cell> > AllCells(3,std::vector<Cell>(0));
-     std::vector < std::vector <Cell> > AllCells;
      std::vector<Cell> lastCells;
+     std::vector < std::vector <Cell> > AllCells;
      bool first = true;
      int cellGrowthCount = 0;
      int metanephric_attract_moves = 0;
@@ -37,6 +37,9 @@ class CellSimulation {
      Cell oldOldCell;
      void placeNewCell(Cell oldCell, Cell newCell, int icount);
      double scaleFactor(Cell c1,Cell C2);
+     void placeMetanephricCells();
+     void placeAttractiveCells();
+     void currentAlgorithm(Cell cell);
 
   public:
      static double TOL;
@@ -84,5 +87,8 @@ class CellSimulation {
      int getNumCellsToMain(Cell cell);
      void setMaxIntermediateBranch(int branch);
      int getMaxIntermediateBranch();
+     void updateSimulation(int currentIter);
+     int  getNormalCellTotal();
+     void updateLastCellList();
 };
 #endif

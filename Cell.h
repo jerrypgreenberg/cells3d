@@ -123,13 +123,17 @@ class Cell {
        void setTestCell(Cell tCell);
        Cell *getLinkCellDown();
        void setLinkCellDown(Cell cell);
-       std::string to_String(SubTypes s);
-       std::string to_String(PeriodicType p);
-       std::string to_String(AddedType a);
-       std::string to_String(Types t);
-       friend std::ostream& operator<<(std::ostream& os, const SubTypes& s);
-       friend std::ostream& operator<<(std::ostream& os, const PeriodicType& p);
-       friend std::ostream& operator<<(std::ostream& os, const AddedType& a);
-       friend std::ostream& operator<<(std::ostream& os, const Types& t);
+       static std::string to_String(SubTypes s);
+       static std::string to_String(PeriodicType p);
+       static std::string to_String(AddedType a);
+       static std::string to_String(Types t);
+       static int to_Int(SubTypes s);
+       static int to_Int(PeriodicType p);
+       static int to_Int(AddedType a);
+       static int to_Int(Types t);
+       friend std::ostream& operator<<(std::ostream& os, SubTypes s);
+       friend std::ostream& operator<<(std::ostream& os, PeriodicType p);
+       friend std::ostream& operator<<(std::ostream& os, AddedType a);
+       friend std::ostream& operator<<(std::ostream& os, Types t);
 };
 #endif

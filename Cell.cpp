@@ -1,6 +1,7 @@
 #include "Cell.h"
 #include <iostream>
 #include <cstdlib>
+#include <type_traits>
 using namespace std;
 
 int Cell::cellCount = 0;
@@ -261,76 +262,76 @@ void Cell::setLinkCellDown(Cell down)
 {
      linkCellDown = &down;
 }
-ostream& operator<<(ostream& os, const SubTypes& s)
+ostream& operator<<(ostream& os, const SubTypes s)
 {
     switch(s)
     {
        case SubTypes::NORMAL:
-          cout <<"NORMAL";
+          os <<"NORMAL";
           break;
        case SubTypes::END:
-          cout <<"END";
+          os <<"END";
           break;
        case SubTypes::INTERMEDIATE:
-          cout <<"INTERMEDIATE";
+          os <<"INTERMEDIATE";
           break;
        case SubTypes::MAIN_R:
-          cout <<"MAIN_R";
+          os <<"MAIN_R";
           break;
        case SubTypes::MAIN_L:
-          cout <<"MAIN_L";
+          os <<"MAIN_L";
           break;
        case SubTypes::MAIN_C:
-          cout <<"MAIN_C";
+          os <<"MAIN_C";
           break;
        case SubTypes::MAIN:
-          cout <<"MAIN";
+          os <<"MAIN";
           break;
        case SubTypes::LAST:
-          cout <<"LAST";
+          os <<"LAST";
           break;
     }   
     return(os);
 }
-ostream& operator<<(ostream& os, const PeriodicType& p)
+ostream& operator<<(ostream& os, const PeriodicType p)
 {
     switch(p)
     {
        case PeriodicType::NORMAL:
-          cout <<"NORMAL";
+          os <<"NORMAL";
           break;
        case PeriodicType::CROSSED:
-          cout <<"CROSSED";
+          os <<"CROSSED";
           break;
     }   
     return(os);
 }
-ostream& operator<<(ostream& os, const AddedType& a)
+ostream& operator<<(ostream& os, const AddedType a)
 {
     switch(a)
     {
        case AddedType::NORMAL:
-          cout <<"NORMAL";
+          os <<"NORMAL";
           break;
        case AddedType::ADDED:
-          cout <<"ADDED";
+          os <<"ADDED";
           break;
     }   
     return(os);
 }
-ostream& operator<<(ostream& os, const Types& t)
+ostream& operator<<(ostream& os, Types t)
 {
     switch(t)
-    {
-       case Types::NORMAL:
-          cout <<"NORMAL";
+   {
+      case Types::NORMAL:
+          os << "NORMAL";
           break;
-       case Types::METANEPHRIC:
-          cout <<"METANEPHRIC";
-          break;
-       case Types::ATTRACTIVE:
-          cout <<"ATTRACTIVE";
-          break;
+      case Types::METANEPHRIC:
+         os <<"METANEPHRIC";
+         break;
+      case Types::ATTRACTIVE:
+         os <<"ATTRACTIVE";
+         break;
     }   
     return(os);
 }
@@ -364,6 +365,36 @@ string Cell::to_String(SubTypes s)
           break;
     }   
 }
+int Cell::to_Int(SubTypes s)
+{
+    switch(s)
+    {
+       case SubTypes::NORMAL:
+          return(0);
+          break;
+       case SubTypes::END:
+          return(1);
+          break;
+       case SubTypes::INTERMEDIATE:
+          return(2);
+          break;
+       case SubTypes::MAIN_R:
+          return(3);
+          break;
+       case SubTypes::MAIN_L:
+          return(4);
+          break;
+       case SubTypes::MAIN_C:
+          return(5);
+          break;
+       case SubTypes::MAIN:
+          return(6);
+          break;
+       case SubTypes::LAST:
+          return(7);
+          break;
+    }   
+}
 string Cell::to_String(PeriodicType p)
 {
     switch(p)
@@ -373,6 +404,18 @@ string Cell::to_String(PeriodicType p)
           break;
        case PeriodicType::CROSSED:
           return("CROSSED");
+          break;
+    }   
+}
+int Cell::to_Int(PeriodicType p)
+{
+    switch(p)
+    {
+       case PeriodicType::NORMAL:
+          return(0);
+          break;
+       case PeriodicType::CROSSED:
+          return(1);
           break;
     }   
 }
@@ -388,6 +431,18 @@ string Cell::to_String(AddedType a)
           break;
     }   
 }
+int Cell::to_Int(AddedType a)
+{
+    switch(a)
+    {
+       case AddedType::NORMAL:
+          return(0);
+          break;
+       case AddedType::ADDED:
+          return(1);
+          break;
+    }   
+}
 string Cell::to_String(Types t)
 {
     switch(t)
@@ -400,6 +455,21 @@ string Cell::to_String(Types t)
           break;
        case Types::ATTRACTIVE:
           return("ATTRACTIVE");
+          break;
+    }   
+}
+int Cell::to_Int(Types t)
+{
+    switch(t)
+    {
+       case Types::NORMAL:
+          return(0);
+          break;
+       case Types::METANEPHRIC:
+          return(1);
+          break;
+       case Types::ATTRACTIVE:
+          return(2);
           break;
     }   
 }
