@@ -8,7 +8,7 @@ int Cell::cellCount = 0;
 Cell::Cell() {
         setCoords(0., 0., 0.);
         setType(Types::NORMAL);
-        setSubType(SubTypes::NORMAL);
+        setSubType(SubTypes::SNORMAL);
         setCellCount(getCellCount() + 1);
         setCellNumber(getCellCount());
         for(int i=0;i<3;++i)
@@ -21,8 +21,8 @@ Cell::Cell(double x, double y, double z, SubTypes stype) {
         setSubType(stype);
         setCellCount(getCellCount() + 1);
         setCellNumber(getCellCount());
-        setPeriodicType(PeriodicType::NORMAL);
-        setAddedType(AddedType::NORMAL);
+        setPeriodicType(PeriodicType::PNORMAL);
+        setAddedType(AddedType::ANORMAL);
         for(int i=0;i<3;++i)
            dock[i] = 0.;
         growthCount = 0;
@@ -34,7 +34,7 @@ Cell::Cell(double x, double y, double z, Types type, SubTypes stype) {
         setSubType(stype);
         setCellCount(getCellCount() + 1);
         setCellNumber(getCellCount());
-        setPeriodicType(PeriodicType::NORMAL);
+        setPeriodicType(PeriodicType::PNORMAL);
         for(int i=0;i<3;++i)
            dock[i] = 0.;
         growthCount = 0;
@@ -262,85 +262,12 @@ void Cell::setLinkCellDown(Cell down)
 {
      linkCellDown = &down;
 }
-ostream& operator<<(ostream& os, const SubTypes s)
+const string Cell::to_String(SubTypes s)
 {
     switch(s)
     {
-       case SubTypes::NORMAL:
-          os <<"NORMAL";
-          break;
-       case SubTypes::END:
-          os <<"END";
-          break;
-       case SubTypes::INTERMEDIATE:
-          os <<"INTERMEDIATE";
-          break;
-       case SubTypes::MAIN_R:
-          os <<"MAIN_R";
-          break;
-       case SubTypes::MAIN_L:
-          os <<"MAIN_L";
-          break;
-       case SubTypes::MAIN_C:
-          os <<"MAIN_C";
-          break;
-       case SubTypes::MAIN:
-          os <<"MAIN";
-          break;
-       case SubTypes::LAST:
-          os <<"LAST";
-          break;
-    }   
-    return(os);
-}
-ostream& operator<<(ostream& os, const PeriodicType p)
-{
-    switch(p)
-    {
-       case PeriodicType::NORMAL:
-          os <<"NORMAL";
-          break;
-       case PeriodicType::CROSSED:
-          os <<"CROSSED";
-          break;
-    }   
-    return(os);
-}
-ostream& operator<<(ostream& os, const AddedType a)
-{
-    switch(a)
-    {
-       case AddedType::NORMAL:
-          os <<"NORMAL";
-          break;
-       case AddedType::ADDED:
-          os <<"ADDED";
-          break;
-    }   
-    return(os);
-}
-ostream& operator<<(ostream& os, Types t)
-{
-    switch(t)
-   {
-      case Types::NORMAL:
-          os << "NORMAL";
-          break;
-      case Types::METANEPHRIC:
-         os <<"METANEPHRIC";
-         break;
-      case Types::ATTRACTIVE:
-         os <<"ATTRACTIVE";
-         break;
-    }   
-    return(os);
-}
-string Cell::to_String(SubTypes s)
-{
-    switch(s)
-    {
-       case SubTypes::NORMAL:
-          return("NORMAL");
+       case SubTypes::SNORMAL:
+          return("PNORMAL");
           break;
        case SubTypes::END:
           return("END");
@@ -365,85 +292,31 @@ string Cell::to_String(SubTypes s)
           break;
     }   
 }
-int Cell::to_Int(SubTypes s)
-{
-    switch(s)
-    {
-       case SubTypes::NORMAL:
-          return(0);
-          break;
-       case SubTypes::END:
-          return(1);
-          break;
-       case SubTypes::INTERMEDIATE:
-          return(2);
-          break;
-       case SubTypes::MAIN_R:
-          return(3);
-          break;
-       case SubTypes::MAIN_L:
-          return(4);
-          break;
-       case SubTypes::MAIN_C:
-          return(5);
-          break;
-       case SubTypes::MAIN:
-          return(6);
-          break;
-       case SubTypes::LAST:
-          return(7);
-          break;
-    }   
-}
-string Cell::to_String(PeriodicType p)
+const string Cell::to_String(PeriodicType p)
 {
     switch(p)
     {
-       case PeriodicType::NORMAL:
-          return("NORMAL");
+       case PeriodicType::PNORMAL:
+          return("PNORMAL");
           break;
        case PeriodicType::CROSSED:
           return("CROSSED");
           break;
     }   
 }
-int Cell::to_Int(PeriodicType p)
-{
-    switch(p)
-    {
-       case PeriodicType::NORMAL:
-          return(0);
-          break;
-       case PeriodicType::CROSSED:
-          return(1);
-          break;
-    }   
-}
-string Cell::to_String(AddedType a)
+const string Cell::to_String(AddedType a)
 {
     switch(a)
     {
-       case AddedType::NORMAL:
-          return("NORMAL");
+       case AddedType::ANORMAL:
+          return("ANORMAL");
           break;
        case AddedType::ADDED:
           return("ADDED");
           break;
     }   
 }
-int Cell::to_Int(AddedType a)
-{
-    switch(a)
-    {
-       case AddedType::NORMAL:
-          return(0);
-          break;
-       case AddedType::ADDED:
-          return(1);
-          break;
-    }   
-}
-string Cell::to_String(Types t)
+const string Cell::to_String(Types t)
 {
     switch(t)
     {
@@ -455,21 +328,6 @@ string Cell::to_String(Types t)
           break;
        case Types::ATTRACTIVE:
           return("ATTRACTIVE");
-          break;
-    }   
-}
-int Cell::to_Int(Types t)
-{
-    switch(t)
-    {
-       case Types::NORMAL:
-          return(0);
-          break;
-       case Types::METANEPHRIC:
-          return(1);
-          break;
-       case Types::ATTRACTIVE:
-          return(2);
           break;
     }   
 }

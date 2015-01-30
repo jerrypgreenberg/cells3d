@@ -139,17 +139,17 @@ void CellSimulation::printSimulationStep() {
 	Cell cell;
 
 	// for (j = 0; j < getNormalCellTotal(); ++j) {
-	//   cout << AllCells[Cell::to_Int(cell.getType())][j] << endl;
+	//   cout << AllCells[cell.getType()][j] << endl;
        // }
 }
 void CellSimulation::growCell(Cell cell) {
-         AllCells[Cell::to_Int(cell.getType())].push_back(cell);
+         AllCells[cell.getType()].push_back(cell);
          return;
 }
 void CellSimulation::growCells(vector<Cell> cells) {
          vector<Cell>::iterator i;
          for (i = cells.begin(); i == cells.end(); ++i)
-           //     AllCells[Cell::to_Int(cells[0].getType())].push_back(*i);
+                AllCells[i->getType()].push_back(*i);
          return;
 }
 int CellSimulation::getNumCellsToMain(Cell cell)
@@ -248,10 +248,10 @@ void CellSimulation::updateSimulation(int currentIter)
 
         if (((currentIter % getCellSkip()) == 0) && (currentIter < getIter())) {
             ++cellGrowthCount;
-
+ 
             /* loop over all normal cells: grow new ones */
             for (j = 0; j < initSize; ++j)
-                currentAlgorithm((Cell) AllCells[Cell::to_Int(Types::NORMAL)][j]);
+                currentAlgorithm((Cell) AllCells[Types::NORMAL][j]);
 
             setStepLength(getStepLength() * getFraction());
             setBranchStepLength(getBranchStepLength() * getFraction());
@@ -265,13 +265,13 @@ void CellSimulation::updateSimulation(int currentIter)
         /* move metanephric cells */
         if (currentIter > START_METANEPHRIC_CELLS) {
             if (debug)
-                System.out.println("IN MOVEMETANEPHRIC CELLS " + ++updateCount);
+                cout << "IN MOVEMETANEPHRIC CELLS" << ++updateCount <<endl;
             moveMetanenephricCells();
         }
 }
-void CellSimulation::getNormalCellTotal()
+int CellSimulation::getNormalCellTotal()
 {
-         AllCells[Cell::to_Int(Types::NORMAL)].size());
+         return(AllCells[Types::NORMAL].size());
 }
 void CellSimulation::placeMetanephricCells()
 {
@@ -282,8 +282,8 @@ void CellSimulation::placeMetanephricCells()
         for (j = 0; j < NUM_METANEPHRIC_CELLS; ++j) {
             x = (iter * .7 * (-0.5 +  (double) (rand()/RAND_MAX))) / getCellSkip();
             y = (iter * .7 *  (double) (rand()/RAND_MAX)) / getCellSkip();
-            AllCells[Cell::to_Int(Types:METANEPHRIC)].push_back(Cell(x,
-                getFraction() + y, 0., Types::METANEPHRIC, SubTypes::NORMAL));
+            AllCells[Types::METANEPHRIC].push_back(Cell(x,
+                getFraction() + y, 0., Types::METANEPHRIC, SubTypes::SNORMAL));
         }
 }
 void CellSimulation::placeAttractiveCells()
@@ -297,8 +297,8 @@ void CellSimulation::placeAttractiveCells()
             ++j, angle += (120 / NUM_ATTRACTIVE_CELLS)) {
             x = attractiveRadius * cos(angle * DTR);
             y = attractiveRadius * sin(angle * DTR);
-            AllCells[Cell::to_Int(Types::ATTRACTIVE)].push_back(Cell(x, y, 0.,
-                Types.ATTRACTIVE, SubTypes.NORMAL));
+            AllCells[Types::ATTRACTIVE].push_back(Cell(x, y, 0.,
+                Types::ATTRACTIVE, SubTypes::SNORMAL));
 
         }
 }
@@ -310,17 +310,17 @@ void CellSimulation::currentAlgorithm(Cell cell)
         int j;
         // System.out.println(" ALGORITHM ITER " + cellGrowthCount + " CELL NUMBER " + cell.getCellNumber());
 
-        switch (Cell:to_Int(SubTypes::getSubType())
+        switch (cell.getSubType())
         {
-          case Cell::to_Int(SubTypes::NORMAL):
+          case SubTypes::SNORMAL:
             break;
 
-          case Cell::to_Int(SubTypes::MAIN_R):
-          case Cell::to_Int(SubTypes::MAIN_L):
-          case Cell::to_Int(SubTypes::MAIN_C):
-          case Cell::to_Int(SubTypes::MAIN):
+          case SubTypes::MAIN_R:
+          case SubTypes::MAIN_L:
+          case SubTypes::MAIN_C:
+          case SubTypes::MAIN:
             /* randomly pick one or 2 cells to grow out of MAIN cell */
-            number = (int)((double) (rand()/RAND_MAX)) * getMaxBranch()) + 1;
+            number = (int)((double) (rand()/RAND_MAX) * getMaxBranch()) + 1;
 
             if (cellGrowthCount == 2) {
                 number = 2;
@@ -330,7 +330,7 @@ void CellSimulation::currentAlgorithm(Cell cell)
                 return;
             }
 
-            if (cell.getLinkCellDown() == null) {
+            if (cell.getLinkCellDown() == (Cell *) NULL) {
                 number = 1;
             }
 
@@ -340,11 +340,11 @@ void CellSimulation::currentAlgorithm(Cell cell)
 
                     /* grow a new cell */
 
-                    placeNewCell(cell, new Cell(cell, SubTypes.END, cell), i);
+                    placeNewCell(cell, Cell(cell, SubTypes::END, cell), i);
 
                     // System.out.println("SWITCH TO CELL TYPE " + cell.getSubType());
-                    if ((cell.getSubType() == SubTypes.NORMAL) ||
-                        (cell.getSubType() == SubTypes.INTERMEDIATE)) {
+                    if ((cell.getSubType() == SubTypes::SNORMAL) ||
+                        (cell.getSubType() == SubTypes::INTERMEDIATE)) {
                         break;
                     }
                 } else {
@@ -354,8 +354,8 @@ void CellSimulation::currentAlgorithm(Cell cell)
 
             break;
 
-        case END:
-        case INTERMEDIATE:
+        case SubTypes::END:
+        case SubTypes::INTERMEDIATE:
 
             /* randomly pick one or 2 cells to grow out of END or INTERMEDIATE cell */
 
@@ -369,19 +369,19 @@ void CellSimulation::currentAlgorithm(Cell cell)
                 return;
             }
 
-            if (cell.getLinkCellDown() == null) {
+            if (cell.getLinkCellDown() == (Cell *) NULL) {
                 number = 1;
             }
 
             if (debug)
-                System.out.println("CELLGROWTHCOUNT*SKIP " +
-                    (cellGrowthCount * getCellSkip()) + " ITER " + (iter - 1));
+                cout << "CELLGROWTHCOUNT*SKIP " << 
+                    (cellGrowthCount * getCellSkip()) <<  " ITER " << (iter - 1) << endl;
 
             if (((cellGrowthCount * getCellSkip()) >= iter) &&
-                (cell.getSubType() == SubTypes.END)) {
+                (cell.getSubType() == SubTypes::END)) {
                 for (i = 0; i < 2; ++i) {
                     if (cell.getGrowthCount() < getMaxIntermediateBranch()) {
-                        placeNewCell(cell, new Cell(cell, SubTypes.LAST, cell),
+                        placeNewCell(cell,Cell(cell, SubTypes::LAST, cell),
                             i);
                     } else {
                         break;
@@ -402,16 +402,18 @@ void CellSimulation::currentAlgorithm(Cell cell)
 }
 void CellSimulation::updateLastCellList()
 {
-        int i;
         Cell cellTemp;
-        lastCells = new Vector();
+        vector<Cell> lastCells;
+        vector<Cell>::iterator i;
 
-        for (i = 0; i < AllCells[Types.NORMAL.ordinal()].size(); ++i) {
-            cellTemp = (Cell) AllCells[Types.NORMAL.ordinal()].elementAt(i);
-
-            if (cellTemp.getSubType() == SubTypes.LAST) {
-                lastCells.addElement(cellTemp);
+        for (i = AllCells[Types::NORMAL].begin();i == AllCells[Types::NORMAL].end();  ++i) {
+            cellTemp = *i;
+            if (cellTemp.getSubType() == SubTypes::LAST) {
+                lastCells.push_back(cellTemp);
             }
         }
 
+}
+void CellSimulation::moveMetanenephricCells()
+{
 }

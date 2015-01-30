@@ -40,6 +40,7 @@ class CellSimulation {
      void placeMetanephricCells();
      void placeAttractiveCells();
      void currentAlgorithm(Cell cell);
+     Cell dummyCell;
 
   public:
      static double TOL;
@@ -90,5 +91,6 @@ class CellSimulation {
      void updateSimulation(int currentIter);
      int  getNormalCellTotal();
      void updateLastCellList();
+     void moveMetanenephricCells();
 };
 #endif

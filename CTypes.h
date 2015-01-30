@@ -1,7 +1,7 @@
 #ifndef __CTYPES__
 #define __CTYPES__
-enum class SubTypes {
-    NORMAL,
+enum SubTypes {
+    SNORMAL,
     END,
     INTERMEDIATE,
     MAIN_R,
@@ -11,16 +11,16 @@ enum class SubTypes {
     LAST
 };
 /** flags for cells crossing periodic boundary **/
-enum class PeriodicType {
-    NORMAL,
+enum PeriodicType {
+    PNORMAL,
     CROSSED
 };
 /** flags for metanephric cells  **/
-enum class AddedType {
-    NORMAL,
+enum AddedType {
+    ANORMAL,
     ADDED
 };
-enum class Types {
+enum Types {
    NORMAL,
    METANEPHRIC,
    ATTRACTIVE
