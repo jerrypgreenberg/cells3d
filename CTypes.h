@@ -1,5 +1,5 @@
-#ifndef __CTYPES__
-#define __CTYPES__
+#ifndef _CTYPES_H_
+#define _CTYPES_H_
 enum SubTypes {
     SNORMAL,
     END,

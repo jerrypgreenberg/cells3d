@@ -1,5 +1,5 @@
-#ifndef __CELLSIMULATION__
-#define __CELLSIMULATION__
+#ifndef _CELLSIMULATION_H_
+#define _CELLSIMULATION_H_
 #include "Cell.h"
 #include<vector>
 #define CELL_TYPES 3
@@ -41,6 +41,33 @@ class CellSimulation {
      void placeAttractiveCells();
      void currentAlgorithm(Cell cell);
      Cell dummyCell;
+     void growCell(Cell cell);
+     void growCells(std::vector<Cell> cells);
+     int getNumCellsToMain(Cell cell);
+     void setMaxIntermediateBranch(int branch);
+     int getMaxIntermediateBranch();
+     void updateLastCellList();
+     void moveMetanenephricCells();
+     static double getCalculatedPhiAngle(double dx, double dy,double dz);
+     static double getCalculatedThetaAngle(double dx, double dy,double dz);
+     int getAttractiveCellTotal();
+     Cell getAttractiveCell(int i);
+     class DistNo {
+         private:
+              int i;
+              double dist;
+         public:
+             DistNo();
+             DistNo(int no,double d);
+             int getI();
+             std::string toString();
+             void setI(int no);
+             double getDist();
+             void setDist(double d);
+             void setDist(int no,double d);
+     };
+     std::vector<DistNo> distVec;
+     void sortThem(std::vector<DistNo> distVec);
 
   public:
      static double TOL;
@@ -83,14 +110,7 @@ class CellSimulation {
      double getFraction();
      void setFraction(double frac);
      void printSimulationStep();
-     void growCell(Cell cell);
-     void growCells(std::vector<Cell> cells);
-     int getNumCellsToMain(Cell cell);
-     void setMaxIntermediateBranch(int branch);
-     int getMaxIntermediateBranch();
-     void updateSimulation(int currentIter);
      int  getNormalCellTotal();
-     void updateLastCellList();
-     void moveMetanenephricCells();
+     void updateSimulation(int currentIter);
 };
 #endif

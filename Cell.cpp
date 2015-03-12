@@ -23,6 +23,7 @@ Cell::Cell(double x, double y, double z, SubTypes stype) {
         setCellNumber(getCellCount());
         setPeriodicType(PeriodicType::PNORMAL);
         setAddedType(AddedType::ANORMAL);
+        setLinkCellDown((Cell *) NULL);
         for(int i=0;i<3;++i)
            dock[i] = 0.;
         growthCount = 0;
@@ -38,11 +39,11 @@ Cell::Cell(double x, double y, double z, Types type, SubTypes stype) {
         for(int i=0;i<3;++i)
            dock[i] = 0.;
         growthCount = 0;
-        // System.out.println("CELL NUMBER " + getCellNumber() + " CELL TYPE " + getType() + " CELL SUBTYPE " + getSubType());
+        cout << "CELL NUMBER " << getCellNumber() << " CELL TYPE " << to_string(getType()) << " CELL SUBTYPE " << to_string(getSubType()) << endl;
 }
 Cell::Cell(Cell cell, SubTypes stype, Cell down) {
         setCoords(cell.getCoords());
-        setLinkCellDown(down);
+        setLinkCellDown(&down);
         setType(cell.getType());
         setSubType(stype);
         setCellCount(getCellCount() + 1);
@@ -258,9 +259,9 @@ Cell* Cell::getLinkCellDown()
 {
      return (linkCellDown);
 }
-void Cell::setLinkCellDown(Cell down)
+void Cell::setLinkCellDown(Cell *down)
 {
-     linkCellDown = &down;
+     linkCellDown = down;
 }
 const string Cell::to_String(SubTypes s)
 {
@@ -354,4 +355,7 @@ int Cell::getGrowthCount()
 {
         return (growthCount);
 }
-
+void Cell::setGrowthCount(int growth)
+{
+        growthCount = growth;
+}

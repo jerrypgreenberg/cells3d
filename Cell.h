@@ -1,5 +1,5 @@
-#ifndef __CELL__
-#define __CELL__
+#ifndef _CELL_H_
+#define _CELL_H_
 #include<vector>
 #include<string>
 #include "CTypes.h"
@@ -122,7 +122,7 @@ class Cell {
        Cell getTestCell();
        void setTestCell(Cell tCell);
        Cell *getLinkCellDown();
-       void setLinkCellDown(Cell cell);
+       void setLinkCellDown(Cell *cell);
        const std::string to_String(SubTypes s);
        const std::string to_String(PeriodicType p);
        const std::string to_String(AddedType a);

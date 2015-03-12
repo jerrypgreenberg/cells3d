@@ -1,5 +1,5 @@
-#ifndef __GLSTUFF__
-#define __GLSTUFF__
+#ifndef _GLSTUFF_H_
+#define _GLSTUFF_H_
 // #include <GL/gl.h>
 // #include <GL/glu.h>
 // #include <glut.h>
@@ -12,4 +12,6 @@ YAXIS,
 ZAXIS
 };
 typedef GLdouble  glMatrixd[4][4];
+typedef GLfloat   glMatrixf[4][4];
+void myReshape(int w,int h);
 #endif
