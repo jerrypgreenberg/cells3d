@@ -27,15 +27,11 @@ struct orig {
   double xyrot[2];
   double zrot;
   double scale;
-} ori;
+};
 struct viewp {
   int xcoord;
   int ycoord;
   int  width;
   int  height;
-} vp,vp2;
-GLfloat position1[4] = { 0.0, 0.0, 1., 1.0 };
-int XMAXSCREEN,YMAXSCREEN;
-double aspect;
-GLfloat cblack[4] = { 0. , 0. , 0.,1.};
+};
 #endif

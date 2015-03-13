@@ -16,8 +16,6 @@ int main(int argc,char **argv)
    GLfloat local_view[] = {0.};
    GLUquadricObj * quadObj,*quadObj2;
    void drawobject();
-   void rescalelight();
-   void rescale();
 
 
 
@@ -32,12 +30,9 @@ int main(int argc,char **argv)
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    XMAXSCREEN=glutGet(GLUT_SCREEN_WIDTH);
    YMAXSCREEN=glutGet(GLUT_SCREEN_HEIGHT);
-   cout << "XMAXSCREEN " << XMAXSCREEN <<endl;
-   cout << "YMAXSCREEN " << YMAXSCREEN <<endl;
    glutInitWindowSize (XMAXSCREEN, YMAXSCREEN);
    glutInitWindowPosition (0, 0);
    mainwindow=glutCreateWindow("CELLS 3D");
-   glutDisplayFunc(drawobject);
    glGetBooleanv(GL_DEPTH_WRITEMASK,&ib);
    glGetBooleanv(GL_DOUBLEBUFFER,&ib);
    glGetBooleanv(GL_STEREO,&ib);
@@ -65,7 +60,8 @@ int main(int argc,char **argv)
    gluQuadricDrawStyle (quadObj2, GLU_FILL);
    gluQuadricOrientation (quadObj2, GLU_OUTSIDE);
    gluQuadricNormals(quadObj2, GLU_SMOOTH);
-   // glutReshapeFunc(myReshape);
+   glutReshapeFunc(myReshape);
+  
    CellSimulation cs(30,30., 60.,Cell(0., 0., 0., SubTypes::END),seed, 1.0, 1.0,2,2,120.,5);
    cout << "##$$##  NUMBER OF NORMAL CELLS " << cs.getNormalCellTotal() << endl;
    ++count;
@@ -84,6 +80,7 @@ int main(int argc,char **argv)
    cout << cs.getNormalCellTotal() << endl;
 */
 
+   glutDisplayFunc(drawobject);
    // glutKeyboardFunc(commandasciikeys);
    // glutPassiveMotionFunc(processmenus);
    // glutSpecialFunc(specialkeys);
@@ -110,7 +107,6 @@ int main(int argc,char **argv)
    glLoadIdentity();
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.tsavemat);
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.mmtmat);
-   glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.mtmat);
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.savemat);
 
    
@@ -120,11 +116,11 @@ int main(int argc,char **argv)
    glLoadIdentity();
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.ratmat);
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.tmat);
+   glTranslated(0.,0.,-20.);
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.tinitmat);
-   rescalelight();
-   rescale();
    Transform::trans(ori.xt[0],ori.xt[1],ori.xt[2]);
    drawobject();
+   glutSwapBuffers();
    glutMainLoop();
 }
 void myReshape(int w,int h)
@@ -157,10 +153,8 @@ void drawobject()
        double x1,x2;
        double x,y,z;
        double xp1[3],xp2[3];
-       void print4D(double* matrix);
-       void print4F(float* matrix);
+       glClearColor(0.,0.,0.,0.);
        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-       // glClearColor(0.,0.,0.,0.);
        glFogfv(GL_FOG_COLOR,cblack);
        glMatrixMode(GL_MODELVIEW);
        glGetIntegerv(GL_VIEWPORT,(int *) &vp2);
@@ -173,91 +167,32 @@ void drawobject()
        glMultMatrixd((double *) ori.tmat);
        glMultMatrixd((double *) ori.ratmat);
        glMultMatrixd((double *) ori.mtmat);
-       n = 10;
        y = 0;
        z = 0;
        x2 = .1;
-       // glColor3d(1.,1.,1.);
-       for(i=0,x=0;i<n;x += x2,++i)
+       glColor3d(1.,1.,1.);
+       for(i=0,x=0;i<n;x += x2)
        {
              xp1[0] = x;
              xp1[1] = y;
              xp1[2] = z;
-             xp2[0] = x;
-             xp2[1] = y+.05;
-             xp2[2] = z;
-             glPushMatrix();
-             glTranslated(x,0.,0.);
-             glBegin(GL_LINES);
-             glVertex3dv(xp1);
-             glVertex3dv(xp2);
-             glEnd();
-             xp2[0] = x;
-             xp2[1] = y-.05;
-             xp2[2] = z;
-             glBegin(GL_LINES);
-             glVertex3dv(xp1);
-             glVertex3dv(xp2);
-             glEnd();
-
-             glPopMatrix();
-       }
-       for(i=0,x=0;i<n;x -= x2,++i)
-       {
              xp1[0] = x;
-             xp1[1] = y;
+             xp1[1] = y+.1;
              xp1[2] = z;
-             xp2[0] = x;
-             xp2[1] = y+.05;
-             xp2[2] = z;
              glPushMatrix();
-             glTranslated(x,0.,0.);
+             glTranslated(x,y,0.);
              glBegin(GL_LINES);
              glVertex3dv(xp1);
              glVertex3dv(xp2);
-             glEnd();
-             xp2[0] = x;
-             xp2[1] = y-.05;
-             xp2[2] = z;
-             glBegin(GL_LINES);
-             glVertex3dv(xp1);
-             glVertex3dv(xp2);
-             glEnd();
-
              glPopMatrix();
-       }
-       x = 0.;
-       y = 0.;
-       z = 0.;
-       xp1[0] = -1.;
-       xp1[1] = y;
-       xp1[2] = z;
-       xp2[0] = 1.;
-       xp2[1] = y;
-       xp2[2] = z;
-       glBegin(GL_LINES);
-       glVertex3dv(xp1);
-       glVertex3dv(xp2);
-       glEnd();
-/*
-             xp1[0] = 0.;
-             xp1[1] = 0.;
-             xp1[2] = 0.;
-             xp1[0] = 0.;
-             xp1[1] = .5;
-             xp1[2] = 0.;
-             glBegin(GL_LINES);
-             glVertex3dv(xp1);
-             glVertex3dv(xp2);
              glEnd();
-*/
-       glutSwapBuffers();
+       }
 }
 void rescale()
 {   
     glPushMatrix();
     glLoadIdentity();
-    // glScaled(ori.scale,ori.scale,ori.scale);
+    glScaled(ori.scale,ori.scale,ori.scale);
     glGetDoublev(GL_MODELVIEW_MATRIX,(double * ) ori.mscale);
     glPopMatrix();
 }   
@@ -269,21 +204,4 @@ void rescalelight()
     glGetFloatv(GL_MODELVIEW_MATRIX,(float * ) ori.lightscale);
     glPopMatrix();
 }
-void print4D(double *matrix)
-{
-     for(int i =0;i<4;++i)
-     {
-        for(int j=0;j<4;++j)
-           cout << *(matrix+4*i+j) << " ";
-        cout << endl;
-     }
-}
-void print4F(float *matrix)
-{
-     for(int i =0;i<4;++i)
-     {
-        for(int j=0;j<4;++j)
-           cout << *(matrix+4*i+j) << " ";
-        cout << endl;
-     }
-}
+

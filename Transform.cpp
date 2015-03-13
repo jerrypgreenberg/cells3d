@@ -5,6 +5,7 @@
 #include  "orig.h"
 using namespace std;
 
+extern struct orig ori;
 double* Transform::rotate(double dx,double dy,double dz,double angle,double *coords)
 {       
     glMatrixd  matrix;
