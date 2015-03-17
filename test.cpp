@@ -65,7 +65,7 @@ int main(int argc,char **argv)
    gluQuadricDrawStyle (quadObj2, GLU_FILL);
    gluQuadricOrientation (quadObj2, GLU_OUTSIDE);
    gluQuadricNormals(quadObj2, GLU_SMOOTH);
-   // glutReshapeFunc(myReshape);
+   glutReshapeFunc(myReshape);
    CellSimulation cs(30,30., 60.,Cell(0., 0., 0., SubTypes::END),seed, 1.0, 1.0,2,2,120.,5);
    cout << "##$$##  NUMBER OF NORMAL CELLS " << cs.getNormalCellTotal() << endl;
    ++count;
@@ -106,7 +106,8 @@ int main(int argc,char **argv)
    ori.xyrot[0] = 0.;
    ori.xyrot[1] = 0.;
    ori.zrot = 0.;
-   ori.scale = cs.getStepLength()*iter*1.6/cellSkip;
+   ori.scale = (cs.getStepLength()*iter*1.6/cellSkip)/XMAXSCREEN;
+   ori.scale = 0.5;
    glLoadIdentity();
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.tsavemat);
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.mmtmat);
@@ -115,7 +116,7 @@ int main(int argc,char **argv)
 
    
    glMatrixMode(GL_MODELVIEW);
-   glViewport( 0,0,XMAXSCREEN,YMAXSCREEN);
+   glViewport(0,0,XMAXSCREEN,YMAXSCREEN);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
    glGetDoublev(GL_MODELVIEW_MATRIX,(double *) ori.ratmat);
@@ -130,10 +131,11 @@ int main(int argc,char **argv)
 void myReshape(int w,int h)
 {
     void pers();
+    void ortho();
     aspect = (float) w/h;
     glViewport(0,0,w,h);
-    pers();
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    ortho();
     XMAXSCREEN=glutGet(GLUT_WINDOW_WIDTH);
     YMAXSCREEN=glutGet(GLUT_WINDOW_HEIGHT);
     printf("XMAX,YMAX %d %d\n",XMAXSCREEN,YMAXSCREEN);
@@ -150,11 +152,23 @@ void pers()
         glGetDoublev(GL_PROJECTION_MATRIX,(double *) pmat);
         glMatrixMode(GL_MODELVIEW);
 }       
+void ortho()
+{       
+        glMatrixd pmat;
+        extern double aspect;
+        extern int xpos,ypos;
+    
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-1.,1.,-1,1.,-1.,1.);
+        glGetDoublev(GL_PROJECTION_MATRIX,(double *) pmat);
+        glMatrixMode(GL_MODELVIEW);
+}       
 void drawobject()
 {
        int i;
        int n;
-       double x1,x2;
+       double x1,x2,y1,y2,z1,z2;
        double x,y,z;
        double xp1[3],xp2[3];
        void print4D(double* matrix);
@@ -177,24 +191,27 @@ void drawobject()
        y = 0;
        z = 0;
        x2 = .1;
+       y2 = .1;
+       z2 = .1;
        // glColor3d(1.,1.,1.);
+       xp1[0] = 0.;
+       xp2[0] = 0.;
        for(i=0,x=0;i<n;x += x2,++i)
        {
-             xp1[0] = x;
-             xp1[1] = y;
-             xp1[2] = z;
-             xp2[0] = x;
-             xp2[1] = y+.05;
-             xp2[2] = z;
+             if(x == 0)
+                 xp2[1] = .1;
+             else
+                 xp2[1] = .05;
              glPushMatrix();
              glTranslated(x,0.,0.);
              glBegin(GL_LINES);
              glVertex3dv(xp1);
              glVertex3dv(xp2);
              glEnd();
-             xp2[0] = x;
-             xp2[1] = y-.05;
-             xp2[2] = z;
+             if(x == 0)
+                 xp2[1] = -.1;
+             else
+                 xp2[1] = -.05;
              glBegin(GL_LINES);
              glVertex3dv(xp1);
              glVertex3dv(xp2);
@@ -204,11 +221,10 @@ void drawobject()
        }
        for(i=0,x=0;i<n;x -= x2,++i)
        {
-             xp1[0] = x;
-             xp1[1] = y;
-             xp1[2] = z;
-             xp2[0] = x;
-             xp2[1] = y+.05;
+             if(x == 0)
+                 xp2[1] = .1;
+             else
+                 xp2[1] = .05;
              xp2[2] = z;
              glPushMatrix();
              glTranslated(x,0.,0.);
@@ -216,9 +232,10 @@ void drawobject()
              glVertex3dv(xp1);
              glVertex3dv(xp2);
              glEnd();
-             xp2[0] = x;
-             xp2[1] = y-.05;
-             xp2[2] = z;
+             if(x == 0)
+                 xp2[1] = -.1;
+             else
+                 xp2[1] = -.05;
              glBegin(GL_LINES);
              glVertex3dv(xp1);
              glVertex3dv(xp2);
@@ -239,25 +256,61 @@ void drawobject()
        glVertex3dv(xp1);
        glVertex3dv(xp2);
        glEnd();
-/*
-             xp1[0] = 0.;
-             xp1[1] = 0.;
-             xp1[2] = 0.;
-             xp1[0] = 0.;
-             xp1[1] = .5;
-             xp1[2] = 0.;
+       x = 0;
+       z = 0;
+       for(i=0,y=0;i<n;y += y2,++i)
+       {
+             if(y == 0)
+                 xp2[0] = .1;
+             else
+                 xp2[0] = .05;
+             glPushMatrix();
+             glTranslated(0.,y,0.);
              glBegin(GL_LINES);
              glVertex3dv(xp1);
              glVertex3dv(xp2);
              glEnd();
-*/
+             if(y == 0)
+                 xp2[0] = -.1;
+             else
+                 xp2[0] = -.05;
+             glBegin(GL_LINES);
+             glVertex3dv(xp1);
+             glVertex3dv(xp2);
+             glEnd();
+
+             glPopMatrix();
+       }
+       for(i=0,y=0;i<n;y -= y2,++i)
+       {
+             if(x == 0)
+                 xp2[0] = .1;
+             else
+                 xp2[0] = .05;
+             glPushMatrix();
+             glTranslated(0.,y,0.);
+             glBegin(GL_LINES);
+             glVertex3dv(xp1);
+             glVertex3dv(xp2);
+             glEnd();
+             if(x == 0)
+                 xp2[0] = -.1;
+             else
+                 xp2[0] = -.05;
+             glBegin(GL_LINES);
+             glVertex3dv(xp1);
+             glVertex3dv(xp2);
+             glEnd();
+
+             glPopMatrix();
+       }
        glutSwapBuffers();
 }
 void rescale()
 {   
     glPushMatrix();
     glLoadIdentity();
-    // glScaled(ori.scale,ori.scale,ori.scale);
+    glScaled(ori.scale,ori.scale,ori.scale);
     glGetDoublev(GL_MODELVIEW_MATRIX,(double * ) ori.mscale);
     glPopMatrix();
 }   
