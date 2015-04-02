@@ -641,3 +641,7 @@ void CellSimulation::placeAttractiveCells()
              AllCells[Types::ATTRACTIVE].push_back(Cell(x,y,z,Types::ATTRACTIVE,SubTypes::SNORMAL));
            }
 }
+Cell CellSimulation::getNormalCells(int index
+{
+     return(AllCells[Types::NORMAL][index]))
+}

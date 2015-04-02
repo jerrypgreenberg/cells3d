@@ -112,5 +112,6 @@ class CellSimulation {
      void printSimulationStep();
      int  getNormalCellTotal();
      void updateSimulation(int currentIter);
+     Cell getNormalCell(int index);
 };
 #endif
